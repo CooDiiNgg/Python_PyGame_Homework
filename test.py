@@ -31,3 +31,4 @@ def map_to_array():
     np.savetxt("map.txt", array, fmt="%d")
 
 
+map_to_array()
