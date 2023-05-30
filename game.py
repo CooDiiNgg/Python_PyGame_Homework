@@ -97,26 +97,6 @@ class TowerDefence:
         textRect.center = (750,35)
         self.display.blit(text, textRect)
     
-    # def right_menu(self, option, tower):
-    #     self.option = option
-    #     self.current_tower = tower
-    #     self.display.blit(pygame.transform.scale(pygame.image.load("Images/Lives_menu.png").convert(), (450,70)), (375,730))
-    #     # add options for towers
-    #     if option == 0:
-    #         # needs to build tower(For now we havee only one)
-    #         self.display.blit(pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50)), (380,735))
-    #         font = pygame.font.Font('freesansbold.ttf', 18)
-    #         text = font.render(("$30"), True, (255, 255, 255))
-    #         textRect = text.get_rect()
-    #         textRect.center = (405,760)
-    #         self.display.blit(text, textRect)
-    #         self.buying_tower.append(pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50)).get_rect())
-    #         self.buying_tower[0].x = 380
-    #         self.buying_tower[0].y = 735
-    #     elif option == 1:
-    #         # already builded tower can upgrade to level 2(first tower)
-    #         # will do leter(dont have the tower image)
-    #         pass
     
     def set_waves(self):
         if sum(self.wave) == 0:
@@ -163,23 +143,7 @@ def test_functions():
                     game.lives -= enemy.hearts_to_take
                     to_delete.append(enemy)
                 enemy.move()
-            # if event.type == pygame.MOUSEBUTTONDOWN:
-            #     if event.button == 1:
-            #         for tower in game.towers:
-            #             if tower.collidepoint(event.pos):
-            #                 game.right_menu(0, tower)
-            #                 break
-            #         for i, option in enumerate(game.buying_tower):
-            #             if option.collidepoint(event.pos):
-            #                 if game.option == 0:
-            #                     if i == 0:
-            #                         if game.money >= 30:
-            #                             game.money -= 30
-            #                             rct = game.towers[game.current_tower]
-            #                             game.Big_turrets.append(rct)
-            #                             game.towers.pop(game.current_tower)
-            #                             game.right_menu(1)
-            #                 break
+            
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
@@ -198,6 +162,24 @@ def test_functions():
                         if tower.collide(event.pos[0], event.pos[1]):
                             break
 
+        for enemy in game.enemies:
+            for tower in game.Real_towers:
+                if tower.collide_range(enemy.x, enemy.y):
+                    tower.shooting()
+                    if time.time() - tower.tower_timer >= random.randrange(1, 5):
+                        tower.shoot_bullet()
+                        tower.tower_timer = time.time()
+                    for bullet in tower.bullets:
+                        if enemy.collide(bullet.x, bullet.y):
+                                enemy.hit(tower.damadge)
+                                bullet.active = False
+                                break
+                    
+            
+
+        for enemy in game.enemies:
+            if enemy.health <= 0:
+                to_delete.append(enemy)
 
         for delete in to_delete:
             game.enemies.remove(delete)

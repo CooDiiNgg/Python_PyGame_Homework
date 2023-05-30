@@ -17,4 +17,4 @@ class Ghost(Enemy):
         self.name = "Ghost"
         self.imgs = imgs[:]
         self.hearts_to_take = 1
-        self.speed_increase = 1
+        self.speed_increase = 0.5

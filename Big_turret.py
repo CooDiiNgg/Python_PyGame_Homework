@@ -1,5 +1,6 @@
 import pygame
 import math
+from Bullets import Bullet
 
 
 class Big_turret():
@@ -8,9 +9,37 @@ class Big_turret():
         self.y = 0
         self.width = 50
         self.height = 50
+        self.damadge = 2
         self.img = pygame.image.load("Images/Big_turret.png")
         self.img = pygame.transform.scale(self.img, (self.width, self.height))
         self.range = 200
+        self.shoot_speed = 5
+        self.shoot = (self.x, self.y)
+        self.bullets = []
+        self.tower_timer = 0
 
     def draw(self, win):
         win.blit(self.img, (self.x, self.y))
+        for bullet in self.bullets:
+           bullet.draw(win)
+    
+    def collide_range(self, X, Y):
+        if X <= self.x + (self.range/2) and X >= self.x - (self.range/2):
+            if Y <= self.y + (self.range/2) and Y >= self.y - (self.range/2):
+                self.shoot = (X,Y)
+                return True
+        self.shoot = (self.x, self.y)
+        return False
+    
+    def shooting(self):
+        for bullet in self.bullets:
+            bullet.update()
+            if not bullet.active:
+                self.bullets.remove(bullet)
+    
+    def shoot_bullet(self):
+        self.bullets.append(Bullet(self.x, self.y, self.shoot[0], self.shoot[1], self.shoot_speed))
+
+        
+
+

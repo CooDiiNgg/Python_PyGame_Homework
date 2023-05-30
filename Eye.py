@@ -17,4 +17,4 @@ class Eye(Enemy):
         self.name = "Eye"
         self.imgs = imgs[:]
         self.hearts_to_take = 1
-        self.speed_increase = 1.5
+        self.speed_increase = 1

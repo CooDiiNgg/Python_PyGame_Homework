@@ -41,8 +41,8 @@ class Enemy:
 
     def collide(self, X, Y):
        
-        if X <= self.x + self.width and X >= self.x:
-            if Y <= self.y + self.height and Y >= self.y:
+        if X <= self.x + self.width + 10 and X >= self.x - 10:
+            if Y <= self.y + self.height + 10 and Y >= self.y - 10:
                 return True
         return False
 
