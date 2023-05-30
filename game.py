@@ -2,6 +2,7 @@ import pygame
 import random
 import test
 import numpy as np
+from Ghost import Ghost
 
 pygame.init()
 
@@ -21,8 +22,9 @@ class TowerDefence:
         self.money = 100
         self.money_on_round = 50  
         self.lives = 10
-        self.wave = 1
-        self.finished_waves = 0
+        self.wave = []
+        self.waves = [[1,0],[4,0]]
+        self.wave_count = 0
     
     def set_map(self):
         self.width = 1200
@@ -38,6 +40,8 @@ class TowerDefence:
         for turret in self.Big_turrets:
             self.display.blit(pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50)), turret)
         self.add_life_menu()
+        for enemy in self.enemies:
+            enemy.draw(self.display)
         pygame.display.update()
 
     # def set_hero_start_place(self, map):
@@ -111,6 +115,21 @@ class TowerDefence:
             # already builded tower can upgrade to level 2(first tower)
             # will do leter(dont have the tower image)
             pass
+    
+    def set_waves(self):
+        if sum(self.wave) == 0:
+            if len(self.enemies) == 0:
+                self.wave = self.waves[self.wave_count]
+                self.wave_count += 1
+                self.money += self.money_on_round
+                self.money_on_round += 25
+        else:
+            en = [Ghost(), None]
+            for x in range(len(self.wave)):
+                if self.wave[x] != 0:
+                    self.wave[x] -= 1
+                    self.enemies.append(en[x])
+                    
 
 
         
@@ -120,34 +139,43 @@ class TowerDefence:
 
 def test_functions():
     running = True
+    clock = pygame.time.Clock()
     game = TowerDefence()
     game.set_tower_build_places()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if game.lives == 0:
-                running = False
-            if game.wave == game.finished_waves:
-                game.money += game.money_on_round
-                game.wave += 1
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    for tower in game.towers:
-                        if tower.collidepoint(event.pos):
-                            game.right_menu(0, tower)
-                            break
-                    for i, option in enumerate(game.buying_tower):
-                        if option.collidepoint(event.pos):
-                            if game.option == 0:
-                                if i == 0:
-                                    if game.money >= 30:
-                                        game.money -= 30
-                                        rct = game.towers[game.current_tower]
-                                        game.Big_turrets.append(rct)
-                                        game.towers.pop(game.current_tower)
-                                        game.right_menu(1)
-                            break
+        if game.lives == 0:
+            running = False
+        clock.tick(60)
+        game.set_waves()
+        to_delete = []
+        if len(game.enemies) != 0:
+            for enemy in game.enemies:
+                enemy.move()
+                if enemy.y > 800:
+                    game.lives -= enemy.hearts_to_take
+                    to_delete.append(enemy)
+            # if event.type == pygame.MOUSEBUTTONDOWN:
+            #     if event.button == 1:
+            #         for tower in game.towers:
+            #             if tower.collidepoint(event.pos):
+            #                 game.right_menu(0, tower)
+            #                 break
+            #         for i, option in enumerate(game.buying_tower):
+            #             if option.collidepoint(event.pos):
+            #                 if game.option == 0:
+            #                     if i == 0:
+            #                         if game.money >= 30:
+            #                             game.money -= 30
+            #                             rct = game.towers[game.current_tower]
+            #                             game.Big_turrets.append(rct)
+            #                             game.towers.pop(game.current_tower)
+            #                             game.right_menu(1)
+            #                 break
+        for delete in to_delete:
+            game.enemies.remove(delete)
         game.display_everything()
     
     pygame.quit()

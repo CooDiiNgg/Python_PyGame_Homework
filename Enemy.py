@@ -9,7 +9,7 @@ class Enemy:
         self.animation_count = 0
         self.health = 1
         self.vel = 3
-        self.path = [(150, -10),(160, 20), (175, 180), (282, 283), (526, 277), (607, 217), (641, 105), (717, 57), (796, 83), (855, 222), (973, 284), (1046, 366), (1022, 458), (894, 492), (740, 504), (580, 542), (148, 541), (10, 442), (-20, 335), (-75, 305), (-100, 345)]
+        self.path = [(150, -10),(160, 20), (175, 180), (282, 283), (526, 277), (607, 217), (641, 105), (717, 57), (796, 83), (855, 222), (973, 284), (1046, 366), (1022, 458), (894, 492), (740, 504), (580, 542), (148, 541), (100, 442), (110, 600), (115, 700), (115, 800)]
         self.x = self.path[0][0]
         self.y = self.path[0][1]
         self.img = None
@@ -20,7 +20,7 @@ class Enemy:
         self.imgs = []
         self.flipped = False
         self.max_health = 0
-        self.speed_increase = 1.2
+        self.hearts_to_take = 0
 
     def draw(self, win):
        
@@ -53,11 +53,11 @@ class Enemy:
 
         x1, y1 = self.path[self.path_pos]
         if self.path_pos + 1 >= len(self.path):
-            x2, y2 = (-10, 355)
+            x2, y2 = (115, 850)
         else:
             x2, y2 = self.path[self.path_pos+1]
 
-        dirn = ((x2-x1)*2, (y2-y1)*2)
+        dirn = ((x2-x1), (y2-y1))
         length = math.sqrt((dirn[0])**2 + (dirn[1])**2)
         dirn = (dirn[0]/length, dirn[1]/length)
 
