@@ -5,16 +5,16 @@ from Enemy import Enemy
 imgs = []
 
 for x in range(1, 2):
-    image = pygame.image.load(f"Images/Ghost/{x}.png")
-    imgs.append(pygame.transform.scale(image, (64, 64)))
+    image = pygame.image.load(f"Images/Eye/{x}.png")
+    imgs.append(pygame.transform.scale(image, (40, 40)))
 
 
-class Ghost(Enemy):
+class Eye(Enemy):
     def __init__(self):
         super().__init__()
-        self.max_health = 2
+        self.max_health = 1
         self.health = self.max_health
-        self.name = "Ghost"
+        self.name = "Eye"
         self.imgs = imgs[:]
         self.hearts_to_take = 1
-        self.speed_increase = 1
+        self.speed_increase = 1.5

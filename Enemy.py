@@ -21,6 +21,7 @@ class Enemy:
         self.flipped = False
         self.max_health = 0
         self.hearts_to_take = 0
+        self.speed_increase = 0
 
     def draw(self, win):
        
@@ -66,8 +67,11 @@ class Enemy:
             for x, img in enumerate(self.imgs):
                 self.imgs[x] = pygame.transform.flip(img, True, False)
 
-        move_x, move_y = ((self.x + dirn[0]), (self.y + dirn[1]))
 
+        move_x = self.x + dirn[0] * self.speed_increase
+        move_y = self.y + dirn[1] * self.speed_increase
+
+        
         self.x = move_x
         self.y = move_y
 

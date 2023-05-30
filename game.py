@@ -3,6 +3,7 @@ import random
 import test
 import numpy as np
 from Ghost import Ghost
+from Eye import Eye
 import time
 
 pygame.init()
@@ -24,7 +25,7 @@ class TowerDefence:
         self.money_on_round = 25
         self.lives = 10
         self.wave = []
-        self.waves = [[1,0],[4,0]]
+        self.waves = [[1,1],[4,0]]
         self.wave_count = 0
         self.timer = 0
     
@@ -128,11 +129,12 @@ class TowerDefence:
                 self.money += self.money_on_round
                 self.money_on_round += 25
         else:
-            en = [Ghost(), None]
+            en = [Ghost(), Eye()]
             for x in range(len(self.wave)):
                 if self.wave[x] != 0:
                     self.wave[x] -= 1
                     self.enemies.append(en[x])
+                    break
                     
 
 
