@@ -4,6 +4,8 @@ import test
 import numpy as np
 from Ghost import Ghost
 from Eye import Eye
+from Place_to_build import Place
+from Big_turret import Big_turret
 import time
 
 pygame.init()
@@ -17,9 +19,8 @@ class TowerDefence:
         # self.hero = hero
         self.enemies = []
         self.towers = []
-        self.Big_turrets = []
+        self.Real_towers = []
         # self.Big_turret_img = pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50))
-        self.buying_tower = []
         self.set_map()
         self.money = 75
         self.money_on_round = 25
@@ -39,9 +40,9 @@ class TowerDefence:
     def display_everything(self):
         self.display.blit(self.map, (0, 0))
         for tower in self.towers:
-            self.display.blit(self.tower_build_img, tower)
-        for turret in self.Big_turrets:
-            self.display.blit(pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50)), turret)
+            tower.draw(self.display)
+        for turret in self.Real_towers:
+            turret.draw(self.display)
         self.add_life_menu()
         for enemy in self.enemies:
             enemy.draw(self.display)
@@ -61,24 +62,22 @@ class TowerDefence:
     
     def set_tower_build_places(self):
         # for now static than will be random
-        self.tower_build_img = pygame.image.load("Images/Build_place.png")
-        self.towers.append(self.tower_build_img.get_rect())
+        self.towers.append(Place())
         self.towers[0].x = 106
         self.towers[0].y = 138
         # self.towers.append((106, 138))
-        self.towers.append(self.tower_build_img.get_rect())
+        self.towers.append(Place())
         self.towers[1].x = 297
         self.towers[1].y = 85
         # self.towers.append((297, 85))
-        self.towers.append(self.tower_build_img.get_rect())
+        self.towers.append(Place())
         self.towers[2].x = 297
         self.towers[2].y = 200
         # self.towers.append((297, 200))
-        self.towers.append(self.tower_build_img.get_rect())
+        self.towers.append(Place())
         self.towers[3].x = 463
         self.towers[3].y = 184
         # self.towers.append((463, 184))
-        self.tower_build_img = pygame.transform.scale(self.tower_build_img.convert(), (50,50))
     
     def add_life_menu(self):
         self.display.blit(pygame.transform.scale(pygame.image.load("Images/Lives_menu.png").convert(), (450,70)), (375,0))
@@ -98,26 +97,26 @@ class TowerDefence:
         textRect.center = (750,35)
         self.display.blit(text, textRect)
     
-    def right_menu(self, option, tower):
-        self.option = option
-        self.current_tower = tower
-        self.display.blit(pygame.transform.scale(pygame.image.load("Images/Lives_menu.png").convert(), (450,70)), (375,730))
-        # add options for towers
-        if option == 0:
-            # needs to build tower(For now we havee only one)
-            self.display.blit(pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50)), (380,735))
-            font = pygame.font.Font('freesansbold.ttf', 18)
-            text = font.render(("$30"), True, (255, 255, 255))
-            textRect = text.get_rect()
-            textRect.center = (405,760)
-            self.display.blit(text, textRect)
-            self.buying_tower.append(pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50)).get_rect())
-            self.buying_tower[0].x = 380
-            self.buying_tower[0].y = 735
-        elif option == 1:
-            # already builded tower can upgrade to level 2(first tower)
-            # will do leter(dont have the tower image)
-            pass
+    # def right_menu(self, option, tower):
+    #     self.option = option
+    #     self.current_tower = tower
+    #     self.display.blit(pygame.transform.scale(pygame.image.load("Images/Lives_menu.png").convert(), (450,70)), (375,730))
+    #     # add options for towers
+    #     if option == 0:
+    #         # needs to build tower(For now we havee only one)
+    #         self.display.blit(pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50)), (380,735))
+    #         font = pygame.font.Font('freesansbold.ttf', 18)
+    #         text = font.render(("$30"), True, (255, 255, 255))
+    #         textRect = text.get_rect()
+    #         textRect.center = (405,760)
+    #         self.display.blit(text, textRect)
+    #         self.buying_tower.append(pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50)).get_rect())
+    #         self.buying_tower[0].x = 380
+    #         self.buying_tower[0].y = 735
+    #     elif option == 1:
+    #         # already builded tower can upgrade to level 2(first tower)
+    #         # will do leter(dont have the tower image)
+    #         pass
     
     def set_waves(self):
         if sum(self.wave) == 0:
@@ -181,6 +180,25 @@ def test_functions():
             #                             game.towers.pop(game.current_tower)
             #                             game.right_menu(1)
             #                 break
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    
+                    towers = [Big_turret(), None]
+                    for tower in game.towers:
+                        if tower.check_if_tower_clicked(event.pos[0], event.pos[1]) != None and tower.selected == True and game.money >= tower.tower_prices[tower.check_if_tower_clicked(event.pos[0], event.pos[1])]:
+                            game.money -= tower.tower_prices[tower.check_if_tower_clicked(event.pos[0], event.pos[1])]
+                            tower.selected = False
+                            game.Real_towers.append(towers[tower.check_if_tower_clicked(event.pos[0], event.pos[1])])
+                            game.Real_towers[-1].x = tower.x
+                            game.Real_towers[-1].y = tower.y
+                            game.towers.remove(tower)
+                            break
+                    for tower in game.towers:
+                        if tower.collide(event.pos[0], event.pos[1]):
+                            break
+
+
         for delete in to_delete:
             game.enemies.remove(delete)
         game.display_everything()
