@@ -3,9 +3,10 @@ import random
 import test
 import numpy as np
 from Ghost import Ghost
+import time
 
 pygame.init()
-
+clock = pygame.time.Clock()
 
 # Createing tower defense game
 
@@ -19,12 +20,13 @@ class TowerDefence:
         # self.Big_turret_img = pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50))
         self.buying_tower = []
         self.set_map()
-        self.money = 100
-        self.money_on_round = 50  
+        self.money = 75
+        self.money_on_round = 25
         self.lives = 10
         self.wave = []
         self.waves = [[1,0],[4,0]]
         self.wave_count = 0
+        self.timer = 0
     
     def set_map(self):
         self.width = 1200
@@ -118,6 +120,8 @@ class TowerDefence:
     
     def set_waves(self):
         if sum(self.wave) == 0:
+            if self.wave_count == len(self.waves):
+                return
             if len(self.enemies) == 0:
                 self.wave = self.waves[self.wave_count]
                 self.wave_count += 1
@@ -139,7 +143,6 @@ class TowerDefence:
 
 def test_functions():
     running = True
-    clock = pygame.time.Clock()
     game = TowerDefence()
     game.set_tower_build_places()
     while running:
@@ -149,14 +152,16 @@ def test_functions():
         if game.lives == 0:
             running = False
         clock.tick(60)
-        game.set_waves()
+        if time.time() - game.timer >= random.randrange(2, 20):
+            game.timer = time.time()
+            game.set_waves()
         to_delete = []
         if len(game.enemies) != 0:
             for enemy in game.enemies:
-                enemy.move()
                 if enemy.y > 800:
                     game.lives -= enemy.hearts_to_take
                     to_delete.append(enemy)
+                enemy.move()
             # if event.type == pygame.MOUSEBUTTONDOWN:
             #     if event.button == 1:
             #         for tower in game.towers:
