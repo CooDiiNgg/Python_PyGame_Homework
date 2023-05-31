@@ -27,7 +27,7 @@ class TowerDefence:
         self.money_on_round = 25
         self.lives = 10
         self.wave = []
-        self.waves = [[6,1],[4,0]]
+        self.waves = [[3,3],[5,2], [2,10]]
         self.wave_count = 0
         self.timer = 0
         self.win = False
