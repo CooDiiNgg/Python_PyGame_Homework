@@ -18,3 +18,4 @@ class Ghost(Enemy):
         self.imgs = imgs[:]
         self.hearts_to_take = 1
         self.speed_increase = 1
+        self.animation_time = 0

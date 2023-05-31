@@ -1,6 +1,8 @@
 import pygame
 import math
 import os
+import time
+
 
 class Enemy:
     def __init__(self):
@@ -22,6 +24,8 @@ class Enemy:
         self.max_health = 0
         self.hearts_to_take = 0
         self.speed_increase = 0
+        self.animation_time = 0
+        self.timer = 0
 
     def draw(self, win):
        
@@ -47,10 +51,13 @@ class Enemy:
         return False
 
     def move(self):
-       
-        self.animation_count += 1
-        if self.animation_count >= len(self.imgs):
-            self.animation_count = 0
+
+        if time.time() - self.timer >= self.animation_time:
+            self.timer = time.time()
+            self.animation_count += 1
+            # print(self.animation_count)
+            if self.animation_count >= len(self.imgs):
+                self.animation_count = 0
 
         x1, y1 = self.path[self.path_pos]
         if self.path_pos + 1 >= len(self.path):

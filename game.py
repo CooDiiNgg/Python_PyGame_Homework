@@ -4,6 +4,7 @@ import test
 import numpy as np
 from Ghost import Ghost
 from Eye import Eye
+from Troll import Troll
 from Place_to_build import Place
 from Big_turret import Big_turret
 from Fast_turret import Fast_turret
@@ -28,7 +29,7 @@ class TowerDefence:
         self.money_on_round = 25
         self.lives = 10
         self.wave = []
-        self.waves = [[3,3],[5,2], [2,10]]
+        self.waves = [[3, 3, 0],[5, 2, 0], [2, 10, 0], [0, 3, 1], [0, 0, 3]]
         self.wave_count = 0
         self.timer = 0
         self.win = False
@@ -127,7 +128,7 @@ class TowerDefence:
                 self.money += self.money_on_round
                 self.money_on_round += 25
         else:
-            en = [Ghost(), Eye()]
+            en = [Ghost(), Eye(), Troll()]
             for x in range(len(self.wave)):
                 if self.wave[x] != 0:
                     self.wave[x] -= 1
@@ -136,7 +137,6 @@ class TowerDefence:
     
     def win_screen(self):
         self.display.blit(pygame.transform.scale(pygame.image.load("Images/Win_screen.png").convert(), (1200,800)), (0,0))
-        pass
                     
 
 
