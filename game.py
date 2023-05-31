@@ -21,6 +21,7 @@ class TowerDefence:
         self.enemies = []
         self.towers = []
         self.Real_towers = []
+        self.level_music = pygame.mixer.music.load("Music/Level.mp3")
         # self.Big_turret_img = pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50))
         self.set_map()
         self.money = 75
@@ -148,6 +149,9 @@ def test_functions():
     running = True
     game = TowerDefence()
     game.set_tower_build_places()
+    #play level music
+    pygame.mixer.music.play()
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
