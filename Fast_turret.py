@@ -34,9 +34,9 @@ class Fast_turret():
     
     def shooting(self):
         for bullet in self.bullets:
-            bullet.update()
             if not bullet.active:
                 self.bullets.remove(bullet)
+            bullet.update()
     
     def shoot_bullet(self):
         self.bullets.append(Bullet(self.x, self.y, self.shoot[0], self.shoot[1], self.shoot_speed))

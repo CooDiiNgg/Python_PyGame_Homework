@@ -18,6 +18,8 @@ class Bullet:
         dir_x = self.en_x - self.x
         dir_y = self.en_y - self.y
         distance = math.sqrt(dir_x ** 2 + dir_y ** 2)
+        if distance == 0:
+            return
         direction = (dir_x / distance, dir_y / distance)
         
         # Move the bullet along the direction vector
@@ -26,6 +28,8 @@ class Bullet:
 
         # Check if the bullet reaches its target
         if distance <= self.speed:
+            self.x = self.en_x
+            self.y = self.en_y
             self.active = False
     
     def draw(self, win):

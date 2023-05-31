@@ -35,7 +35,7 @@ class TowerDefence:
         self.width = 1200
         self.height = 800
         self.display = pygame.display.set_mode((self.width, self.height))
-        self.map = pygame.image.load("Images/Map.png").convert()
+        self.map = pygame.image.load("Images/Real_map.png").convert()
         self.map = pygame.transform.scale(self.map, (self.width, self.height))
     
     def display_everything(self):
@@ -64,21 +64,33 @@ class TowerDefence:
     def set_tower_build_places(self):
         # for now static than will be random
         self.towers.append(Place())
-        self.towers[0].x = 106
-        self.towers[0].y = 138
+        self.towers[0].x = 313
+        self.towers[0].y = 293
         # self.towers.append((106, 138))
         self.towers.append(Place())
         self.towers[1].x = 297
         self.towers[1].y = 85
         # self.towers.append((297, 85))
         self.towers.append(Place())
-        self.towers[2].x = 297
-        self.towers[2].y = 200
+        self.towers[2].x = 102
+        self.towers[2].y = 346
         # self.towers.append((297, 200))
         self.towers.append(Place())
-        self.towers[3].x = 463
-        self.towers[3].y = 184
+        self.towers[3].x = 515
+        self.towers[3].y = 422
         # self.towers.append((463, 184))
+        self.towers.append(Place())
+        self.towers[4].x = 663
+        self.towers[4].y = 425
+        # self.towers.append((663, 425))
+        self.towers.append(Place())
+        self.towers[5].x = 445
+        self.towers[5].y = 611
+        # self.towers.append((445, 611))
+        self.towers.append(Place())
+        self.towers[6].x = 737
+        self.towers[6].y = 611
+        # self.towers.append((737, 611))
     
     def add_life_menu(self):
         self.display.blit(pygame.transform.scale(pygame.image.load("Images/Lives_menu.png").convert(), (450,70)), (375,0))
@@ -140,7 +152,7 @@ def test_functions():
         to_delete = []
         if len(game.enemies) != 0:
             for enemy in game.enemies:
-                if enemy.y > 800:
+                if enemy.x > 1200:
                     game.lives -= enemy.hearts_to_take
                     to_delete.append(enemy)
                 enemy.move()
@@ -148,7 +160,7 @@ def test_functions():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    
+                    print(event.pos[0], event.pos[1])
                     towers = [Big_turret(), Fast_turret()]
                     for tower in game.towers:
                         if tower.check_if_tower_clicked(event.pos[0], event.pos[1]) != None and tower.selected == True and game.money >= tower.tower_prices[tower.check_if_tower_clicked(event.pos[0], event.pos[1])]:
