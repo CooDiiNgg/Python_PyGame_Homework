@@ -30,6 +30,7 @@ class TowerDefence:
         self.waves = [[6,1],[4,0]]
         self.wave_count = 0
         self.timer = 0
+        self.win = False
     
     def set_map(self):
         self.width = 1200
@@ -47,6 +48,8 @@ class TowerDefence:
         self.add_life_menu()
         for enemy in self.enemies:
             enemy.draw(self.display)
+        if self.win:
+            self.win_screen()
         pygame.display.update()
 
     # def set_hero_start_place(self, map):
@@ -114,6 +117,8 @@ class TowerDefence:
     def set_waves(self):
         if sum(self.wave) == 0:
             if self.wave_count == len(self.waves):
+                if len(self.enemies) == 0:
+                    self.win = True
                 return
             if len(self.enemies) == 0:
                 self.wave = self.waves[self.wave_count]
@@ -127,6 +132,10 @@ class TowerDefence:
                     self.wave[x] -= 1
                     self.enemies.append(en[x])
                     break
+    
+    def win_screen(self):
+        self.display.blit(pygame.transform.scale(pygame.image.load("Images/Win_screen.png").convert(), (1200,800)), (0,0))
+        pass
                     
 
 
@@ -143,7 +152,7 @@ def test_functions():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        if game.lives == 0:
+        if game.lives <= 0:
             running = False
         clock.tick(60)
         if time.time() - game.timer >= random.randrange(2, 20):
@@ -160,7 +169,7 @@ def test_functions():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    print(event.pos[0], event.pos[1])
+
                     towers = [Big_turret(), Fast_turret()]
                     for tower in game.towers:
                         if tower.check_if_tower_clicked(event.pos[0], event.pos[1]) != None and tower.selected == True and game.money >= tower.tower_prices[tower.check_if_tower_clicked(event.pos[0], event.pos[1])]:
