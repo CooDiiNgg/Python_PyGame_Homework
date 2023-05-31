@@ -6,6 +6,7 @@ from Ghost import Ghost
 from Eye import Eye
 from Place_to_build import Place
 from Big_turret import Big_turret
+from Fast_turret import Fast_turret
 import time
 
 pygame.init()
@@ -26,7 +27,7 @@ class TowerDefence:
         self.money_on_round = 25
         self.lives = 10
         self.wave = []
-        self.waves = [[1,1],[4,0]]
+        self.waves = [[6,1],[4,0]]
         self.wave_count = 0
         self.timer = 0
     
@@ -148,7 +149,7 @@ def test_functions():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     
-                    towers = [Big_turret(), None]
+                    towers = [Big_turret(), Fast_turret()]
                     for tower in game.towers:
                         if tower.check_if_tower_clicked(event.pos[0], event.pos[1]) != None and tower.selected == True and game.money >= tower.tower_prices[tower.check_if_tower_clicked(event.pos[0], event.pos[1])]:
                             game.money -= tower.tower_prices[tower.check_if_tower_clicked(event.pos[0], event.pos[1])]
@@ -166,7 +167,7 @@ def test_functions():
             for tower in game.Real_towers:
                 if tower.collide_range(enemy.x, enemy.y):
                     tower.shooting()
-                    if time.time() - tower.tower_timer >= random.randrange(1, 5):
+                    if time.time() - tower.tower_timer >= random.randrange(tower.min_shoot_delay, 10):
                         tower.shoot_bullet()
                         tower.tower_timer = time.time()
                     for bullet in tower.bullets:

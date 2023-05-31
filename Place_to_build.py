@@ -11,9 +11,9 @@ class Place():
         self.img = pygame.transform.scale(self.img, (self.width, self.height))
         self.rect = self.img.get_rect()
         self.selected = False
-        self.tower_prices = [30]
-        self.tower_images = [pygame.transform.scale(pygame.image.load("Images/Big_turret.png"), (20,20))]
-        self.tower_coordinates = [(380,735)]
+        self.tower_prices = [30, 40]
+        self.tower_images = [pygame.transform.scale(pygame.image.load("Images/Big_turret.png"), (20,20)), pygame.transform.scale(pygame.image.load("Images/Fast_turret.png"), (20,20))]
+        self.tower_coordinates = [(380,735), (430,735)]
 
     def draw(self, win):
         win.blit(self.img, (self.x, self.y))

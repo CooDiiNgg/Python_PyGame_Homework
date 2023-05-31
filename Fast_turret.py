@@ -3,21 +3,21 @@ import math
 from Bullets import Bullet
 
 
-class Big_turret():
+class Fast_turret():
     def __init__(self):
         self.x = 0
         self.y = 0
         self.width = 50
         self.height = 50
-        self.damadge = 2
-        self.img = pygame.image.load("Images/Big_turret.png")
+        self.damadge = 1
+        self.img = pygame.image.load("Images/Fast_turret.png")
         self.img = pygame.transform.scale(self.img, (self.width, self.height))
-        self.range = 200
+        self.range = 300
         self.shoot_speed = 5
         self.shoot = (self.x, self.y)
         self.bullets = []
         self.tower_timer = 0
-        self.min_shoot_delay = 4
+        self.min_shoot_delay = 2
 
     def draw(self, win):
         win.blit(self.img, (self.x, self.y))
