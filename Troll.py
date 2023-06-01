@@ -13,10 +13,10 @@ class Troll(Enemy):
         super().__init__()
         self.max_health = 8
         self.health = self.max_health
-        self.width = 74
-        self.height = 74
+        self.width = 80
+        self.height = 80
         self.name = "Troll"
         self.imgs = imgs[:]
         self.hearts_to_take = 3
-        self.speed_increase = 1
+        self.speed_increase = 0.8
         self.animation_time = 0.15

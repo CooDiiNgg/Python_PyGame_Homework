@@ -3,7 +3,7 @@ import random
 import test
 import numpy as np
 from Ghost import Ghost
-from Eye import Eye
+from Bat import Bat
 from Troll import Troll
 from Place_to_build import Place
 from Big_turret import Big_turret
@@ -22,7 +22,6 @@ class TowerDefence:
         self.enemies = []
         self.towers = []
         self.Real_towers = []
-        self.level_music = pygame.mixer.music.load("Music/Level.mp3")
         # self.Big_turret_img = pygame.transform.scale(pygame.image.load("Images/Big_turret.png").convert(), (50,50))
         self.set_map()
         self.money = 75
@@ -128,7 +127,7 @@ class TowerDefence:
                 self.money += self.money_on_round
                 self.money_on_round += 25
         else:
-            en = [Ghost(), Eye(), Troll()]
+            en = [Ghost(), Bat(), Troll()]
             for x in range(len(self.wave)):
                 if self.wave[x] != 0:
                     self.wave[x] -= 1
@@ -137,6 +136,11 @@ class TowerDefence:
     
     def win_screen(self):
         self.display.blit(pygame.transform.scale(pygame.image.load("Images/Win_screen.png").convert(), (1200,800)), (0,0))
+    
+    def play_music(self):
+        if pygame.mixer.music.get_busy() == False:
+            pygame.mixer.music.load("Music/Level.mp3")
+            pygame.mixer.music.play()
                     
 
 
@@ -149,8 +153,6 @@ def test_functions():
     running = True
     game = TowerDefence()
     game.set_tower_build_places()
-    #play level music
-    pygame.mixer.music.play()
 
     while running:
         for event in pygame.event.get():
@@ -209,6 +211,8 @@ def test_functions():
 
         for delete in to_delete:
             game.enemies.remove(delete)
+        
+        game.play_music()
         game.display_everything()
     
     pygame.quit()

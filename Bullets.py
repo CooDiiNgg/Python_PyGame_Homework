@@ -19,6 +19,8 @@ class Bullet:
         dir_y = self.en_y - self.y
         distance = math.sqrt(dir_x ** 2 + dir_y ** 2)
         if distance == 0:
+            self.x = self.en_x
+            self.y = self.en_y
             return
         direction = (dir_x / distance, dir_y / distance)
         

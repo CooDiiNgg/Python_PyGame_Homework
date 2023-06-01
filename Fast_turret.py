@@ -13,7 +13,7 @@ class Fast_turret():
         self.img = pygame.image.load("Images/Fast_turret.png")
         self.img = pygame.transform.scale(self.img, (self.width, self.height))
         self.range = 300
-        self.shoot_speed = 5
+        self.shoot_speed = 6
         self.shoot = (self.x, self.y)
         self.bullets = []
         self.tower_timer = 0
