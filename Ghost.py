@@ -4,9 +4,9 @@ from Enemy import Enemy
 
 imgs = []
 
-for x in range(1, 2):
+for x in range(1, 14):
     image = pygame.image.load(f"Images/Ghost/{x}.png")
-    imgs.append(pygame.transform.scale(image, (64, 64)))
+    imgs.append(pygame.transform.scale(image, (100, 100)))
 
 
 class Ghost(Enemy):
@@ -18,4 +18,4 @@ class Ghost(Enemy):
         self.imgs = imgs[:]
         self.hearts_to_take = 1
         self.speed_increase = 1
-        self.animation_time = 0
+        self.animation_time = 0.08
