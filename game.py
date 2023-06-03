@@ -32,6 +32,7 @@ class TowerDefence:
         self.wave_count = 0
         self.timer = 0
         self.win = False
+        self.music_flag = True
     
     def set_map(self):
         self.width = 1200
@@ -136,9 +137,16 @@ class TowerDefence:
     
     def win_screen(self):
         self.display.blit(pygame.transform.scale(pygame.image.load("Images/Win_screen.png").convert(), (1200,800)), (0,0))
+        #play win music
+        if self.music_flag:
+            #make it louder
+            pygame.mixer.music.load("Music/Win.mp3")
+            pygame.mixer.music.set_volume(0.7)
+            pygame.mixer.music.play()
+            self.music_flag = False
     
     def play_music(self):
-        if pygame.mixer.music.get_busy() == False:
+        if pygame.mixer.music.get_busy() == False and self.win == False:
             pygame.mixer.music.load("Music/Level.mp3")
             pygame.mixer.music.play()
                     
@@ -169,6 +177,8 @@ def test_functions():
             for enemy in game.enemies:
                 if enemy.x > 1200:
                     game.lives -= enemy.hearts_to_take
+                    pygame.mixer.music.load("Music/Loose_life.mp3")
+                    pygame.mixer.music.play()
                     to_delete.append(enemy)
                 enemy.move()
             
@@ -186,22 +196,51 @@ def test_functions():
                             game.Real_towers[-1].y = tower.y
                             game.towers.remove(tower)
                             break
+                    
+                    for tower in game.Real_towers:
+                        if tower.check_if_option_clicked(event.pos[0], event.pos[1]) != None and tower.selected == True:
+                            if tower.check_if_option_clicked(event.pos[0], event.pos[1]) == 0:
+                                game.money += tower.sell_prices[tower.level]
+                                game.Real_towers.remove(tower)
+                                game.towers.append(Place())
+                                game.towers[-1].x = tower.x
+                                game.towers[-1].y = tower.y
+                                break
+                            else:
+                                if game.money >= tower.level_up_prices[tower.level]:
+                                    game.money -= tower.level_up_prices[tower.level]
+                                    tower.level += 1
+                                    break
+                    
                     for tower in game.towers:
                         if tower.collide(event.pos[0], event.pos[1]):
                             break
+                            
+                    for tower in game.Real_towers:
+                        if tower.collide(event.pos[0], event.pos[1]):
+                            break
 
+        for tower in game.Real_towers:
+            tower.delete_all = True
+        
         for enemy in game.enemies:
             for tower in game.Real_towers:
                 if tower.collide_range(enemy.x, enemy.y):
+                    tower.delete_all = False
                     tower.shooting()
-                    if time.time() - tower.tower_timer >= random.randrange(tower.min_shoot_delay, 10):
+                    if time.time() - tower.tower_timer >= tower.min_shoot_delay[tower.level]:
                         tower.shoot_bullet()
                         tower.tower_timer = time.time()
                     for bullet in tower.bullets:
                         if enemy.collide(bullet.x, bullet.y):
-                                enemy.hit(tower.damadge)
+                                enemy.hit(tower.damadge[tower.level])
                                 bullet.active = False
                                 break
+        
+        for tower in game.Real_towers:
+            if tower.delete_all:
+                for bullet in tower.bullets:
+                    tower.bullets.remove(bullet)
                     
             
 
